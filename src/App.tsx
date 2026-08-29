@@ -159,11 +159,11 @@ export default function App() {
           setMaxUnlockedStep(13); 
         }, 3000);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("API Error:", error);
       setMessages(prev => [...prev, { 
         role: 'model', 
-        text: "Hệ thống AI đang xử lý lượng dữ liệu lớn hoặc chưa thiết lập API key. (Bạn có thể tiếp tục xem Demo Dashboard hoặc cấu hình VITE_GEMINI_API_KEY trong file .env)." 
+        text: `Lỗi hệ thống: ${error.message}. (Vui lòng xem Console F12 để biết chi tiết lỗi hoặc kiểm tra lại file .env).` 
       }]);
     } finally {
       setIsTyping(false);

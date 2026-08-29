@@ -79,9 +79,9 @@ BẮT BUỘC TRẢ VỀ CHÍNH XÁC ĐỊNH DẠNG JSON SAU (Không có markdown
       responseMimeType: "application/json",
     }
   };
-  
-  const apiKey = customApiKey || (import.meta as any).env?.VITE_GEMINI_API_KEY || ""; 
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+  const apiKey = customApiKey || (import.meta as any).env?.VITE_GEMINI_API_KEY || "";
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
 
   const response = await fetch(apiUrl, {
     method: 'POST',
@@ -94,7 +94,7 @@ BẮT BUỘC TRẢ VỀ CHÍNH XÁC ĐỊNH DẠNG JSON SAU (Không có markdown
   }
 
   const result = await response.json();
-  
+
   if (result.candidates && result.candidates.length > 0) {
     const jsonText = result.candidates[0].content.parts[0].text;
     const cleanJson = jsonText.replace(/^```json\s*/i, '').replace(/\s*```$/i, '').trim();
