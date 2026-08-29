@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import { User, Cpu, ArrowRight } from 'lucide-react';
+import React, { useRef, useEffect, useState } from 'react';
+import { User, Cpu, ArrowRight, ChevronRight, ChevronLeft } from 'lucide-react';
 import { BusinessProfile, ChatMessage, AiCognitiveState } from '../../types';
 import { FormatText, CognitivePanel } from '../common';
 
@@ -23,6 +23,8 @@ export const InterviewStep: React.FC<InterviewStepProps> = ({
   onSendMessage
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(window.innerWidth > 768);
+
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -36,10 +38,19 @@ export const InterviewStep: React.FC<InterviewStepProps> = ({
   };
 
   return (
-    <div className="flex-1 flex h-full overflow-hidden animate-in fade-in duration-300">
+    <div className="flex-1 flex h-full overflow-hidden animate-in fade-in duration-300 relative">
       <div className="flex-1 flex flex-col bg-[#0B1120] relative">
         <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-emerald-500 z-10"></div>
         
+        {/* PANEL TOGGLE BUTTON */}
+        <button 
+          onClick={() => setIsPanelOpen(!isPanelOpen)}
+          className="absolute top-4 right-4 z-20 p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg shadow-lg border border-slate-700"
+          title="Toggle AI Engine"
+        >
+          {isPanelOpen ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+        </button>
+
         {/* SMALL BUSINESS PROFILE PANEL */}
         {businessProfile && (
           <div className="bg-slate-900 border-b border-slate-800 p-4 shrink-0 flex gap-6 text-sm shadow-md z-10">
@@ -120,9 +131,12 @@ export const InterviewStep: React.FC<InterviewStepProps> = ({
               <ArrowRight className="w-5 h-5" />
             </button>
           </div>
-        </div>
       </div>
-      <CognitivePanel aiState={aiState} />
+      {isPanelOpen && (
+        <div className="absolute right-0 top-0 h-full shadow-2xl z-30 md:relative md:shadow-none">
+          <CognitivePanel aiState={aiState} />
+        </div>
+      )}
     </div>
   );
 };
