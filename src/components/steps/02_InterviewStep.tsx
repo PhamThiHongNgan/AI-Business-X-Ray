@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { User, Cpu, ArrowRight, ChevronRight, ChevronLeft } from 'lucide-react';
+import { User, Cpu, ArrowRight, ChevronRight, ChevronLeft, X } from 'lucide-react';
 import { BusinessProfile, ChatMessage, AiCognitiveState } from '../../types';
 import { FormatText, CognitivePanel } from '../common';
 
@@ -134,9 +134,21 @@ export const InterviewStep: React.FC<InterviewStepProps> = ({
       </div>
       </div>
       {isPanelOpen && (
-        <div className="absolute right-0 top-0 h-full shadow-2xl z-30 md:relative md:shadow-none">
-          <CognitivePanel aiState={aiState} />
-        </div>
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 z-20 md:hidden" 
+            onClick={() => setIsPanelOpen(false)}
+          />
+          <div className="absolute right-0 top-0 h-full shadow-2xl z-30 md:relative md:shadow-none max-w-full">
+            <CognitivePanel aiState={aiState} />
+            <button 
+              onClick={() => setIsPanelOpen(false)}
+              className="md:hidden absolute top-4 right-4 p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg shadow-lg border border-slate-700"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </>
       )}
     </div>
   );
