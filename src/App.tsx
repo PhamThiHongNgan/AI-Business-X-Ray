@@ -148,7 +148,8 @@ export default function App() {
         setAiState(aiResponse.aiState);
       }
       
-      if (aiResponse.isDataSufficientToConclude || (aiResponse.aiState && aiResponse.aiState.confidenceLevel >= 85)) {
+      const questionCount = Math.floor(newMessages.length / 2);
+      if (aiResponse.isDataSufficientToConclude || (aiResponse.aiState && aiResponse.aiState.confidenceLevel >= 85) || questionCount >= 8) {
         setMaxUnlockedStep(2); 
         
         if (aiResponse.diagnosticData) {

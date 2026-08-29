@@ -28,6 +28,11 @@ export const sendGeminiInterview = async (
 Hiện tại chưa có thông tin đầu vào. Hãy đặt câu hỏi để tìm hiểu sơ bộ về mô hình kinh doanh, sản phẩm, và vấn đề của CEO.
 ---------------------------------------------`;
 
+  const questionCount = Math.floor(messages.length / 2) + 1;
+  const turnInstruction = questionCount >= 8 
+    ? `[QUAN TRỌNG]: BẠN ĐÃ ĐẶT ${questionCount} CÂU HỎI. BẠN BẮT BUỘC PHẢI DỪNG ĐẶT THÊM CÂU HỎI MỚI. BẠN PHẢI KẾT LUẬN NGAY LẬP TỨC BẰNG CÁCH TRẢ VỀ "isDataSufficientToConclude": true, VÀ ĐIỀN ĐẦY ĐỦ ĐIỂM SỐ VÀO "diagnosticData". Câu trả lời cuối (replyToUser) chỉ cần cảm ơn và tóm tắt ngắn gọn vấn đề.`
+    : `[Tiến độ phỏng vấn]: Bạn đang ở câu hỏi thứ ${questionCount}/8. Tối đa chỉ được hỏi 8-10 câu. Hãy hỏi tập trung, không lan man.`;
+
   const systemPrompt = `Bạn là AI Business Architect & CEO Challenger.
 Nhiệm vụ: Phỏng vấn CEO để chẩn đoán các vấn đề và rủi ro kinh doanh. 
 
@@ -42,6 +47,8 @@ Nguyên tắc ĐẶC BIỆT QUAN TRỌNG:
 5. LUẬT PHỎNG VẤN 1 CÂU HỎI MỖI LƯỢT: CHỈ ĐƯỢC PHÉP HỎI ĐÚNG 01 CÂU HỎI trong mỗi lượt hồi đáp. Không gộp nhiều câu.
 6. Nếu câu trả lời quá ngắn, không suy diễn, hãy hỏi follow-up.
 7. Không đồng ý ngay với CEO. Tìm kiếm giả định sai lầm.
+
+${turnInstruction}
 
 BẮT BUỘC TRẢ VỀ CHÍNH XÁC ĐỊNH DẠNG JSON SAU (Không có markdown block \`\`\`json):
 {
