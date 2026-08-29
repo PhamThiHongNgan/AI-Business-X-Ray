@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Menu, X, Cpu } from 'lucide-react';
 import { 
+
   IntakeData, 
   BusinessProfile, 
   ChatMessage, 
@@ -61,6 +63,7 @@ export default function App() {
   const [maxUnlockedStep, setMaxUnlockedStep] = useState<number>(1); 
   const [, setIsDemoMode] = useState<boolean>(false);
   const [diagnosticData, setDiagnosticData] = useState<DiagnosticData | null>(null); 
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   
   const { isPdfReady } = useHtml2Pdf();
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
@@ -255,14 +258,33 @@ export default function App() {
   const sortedDataList = useMemo(() => getSortedCriteria(activeData), [activeData]);
 
   return (
-    <div className="flex h-screen bg-[#050810] text-slate-200 font-sans font-medium overflow-hidden selection:bg-indigo-500/30 print:h-auto print:bg-white print:text-slate-900 print:overflow-visible">
+    <div className="flex flex-col md:flex-row h-screen bg-[#050810] text-slate-200 font-sans font-medium overflow-hidden selection:bg-indigo-500/30 print:h-auto print:bg-white print:text-slate-900 print:overflow-visible text-[16px] md:text-[18px]">
       
+      {/* MOBILE HEADER */}
+      <div className="md:hidden flex items-center justify-between p-4 bg-[#0B1120] border-b border-slate-800 z-40 shrink-0">
+        <div className="flex items-center text-indigo-400">
+          <Cpu className="w-5 h-5 mr-2" />
+          <span className="text-base font-black tracking-widest">AI X-RAY</span>
+        </div>
+        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 bg-slate-800 rounded-lg">
+          {isSidebarOpen ? <X className="w-5 h-5 text-slate-300" /> : <Menu className="w-5 h-5 text-slate-300" />}
+        </button>
+      </div>
+
       {/* SIDEBAR NAVIGATION */}
-      <Sidebar 
-        currentStepIndex={currentStepIndex}
-        maxUnlockedStep={maxUnlockedStep}
-        onSelectStep={setCurrentStepIndex}
-      />
+      <div className={`fixed inset-y-0 left-0 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition duration-300 ease-in-out z-50 md:z-0 flex shrink-0`}>
+        <Sidebar 
+          currentStepIndex={currentStepIndex}
+          maxUnlockedStep={maxUnlockedStep}
+          onSelectStep={(idx) => {
+            setCurrentStepIndex(idx);
+            setIsSidebarOpen(false);
+          }}
+        />
+        {isSidebarOpen && (
+          <div className="fixed inset-0 bg-black/50 -z-10 md:hidden" onClick={() => setIsSidebarOpen(false)}></div>
+        )}
+      </div>
 
       {/* MAIN CONTENT AREA */}
       <main className="flex-1 flex flex-col relative overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed print:bg-none print:bg-white print:overflow-visible print:block">
