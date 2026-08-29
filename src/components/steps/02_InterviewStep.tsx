@@ -132,6 +132,7 @@ export const InterviewStep: React.FC<InterviewStepProps> = ({
             </button>
           </div>
       </div>
+      </div>
       {isPanelOpen && (
         <div className="absolute right-0 top-0 h-full shadow-2xl z-30 md:relative md:shadow-none">
           <CognitivePanel aiState={aiState} />
